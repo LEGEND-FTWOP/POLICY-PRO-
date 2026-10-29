@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolicyPro - Insurance Policy Holder Management Platform | WD-LIC-002</title>
+    <meta name="description" content="PolicyPro - Comprehensive Insurance Policy Holder Management Platform. Built for Data Alcott Systems Web Development Internship WD-LIC-002.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237C3AED'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z'/></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-wrapper">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div class="brand-info">
+                        <h2>PolicyPro</h2>
+                        <span>LIC Agent Portal</span>
+                    </div>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Sidebar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Core Operations</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#dashboard" class="nav-link active" data-target="dashboard">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#holders" class="nav-link" data-target="holders">
+                            <i class="fa-solid fa-users"></i>
+                            <span>Policy Holders</span>
+                            <span class="nav-badge info" id="holdersCountBadge">6</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#register" class="nav-link" data-target="register">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>Register Holder</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#issue-policy" class="nav-link" data-target="issue-policy">
+                            <i class="fa-solid fa-file-contract"></i>
+                            <span>Issue Policy</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="nav-section-title">Policy Servicing</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#premiums" class="nav-link" data-target="premiums">
+                            <i class="fa-solid fa-receipt"></i>
+                            <span>Premium Collection</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#renewals" class="nav-link" data-target="renewals">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <span>Renewals</span>
+                            <span class="nav-badge" id="renewalAlertBadge">2</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#claims" class="nav-link" data-target="claims">
+                            <i class="fa-solid fa-hand-holding-medical"></i>
+                            <span>Claim Processing</span>
+                            <span class="nav-badge info" id="claimsPendingBadge">3</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="nav-section-title">Management & Tools</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#communications" class="nav-link" data-target="communications">
+                            <i class="fa-solid fa-comments"></i>
+                            <span>Communication</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#reports" class="nav-link" data-target="reports">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Reports & Analytics</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="internship-tag">
+                    <strong>Task: WD-LIC-002</strong>
+                    <span>Data Alcott Systems · DAS-LIC-002</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <!-- Top Navigation Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="global-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="globalSearchInput" placeholder="Search holder, policy #, PAN...">
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <!-- Theme Toggle -->
+                    <button class="topbar-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+
+                    <!-- Reset Data Button -->
+                    <button class="topbar-btn" id="resetDataBtn" title="Reset to Sample Internship Data">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+
+                    <!-- Notification Button & Dropdown -->
+                    <div style="position: relative;">
+                        <button class="topbar-btn" id="notifBellBtn" title="Notifications">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="btn-badge" id="notifBadge">3</span>
+                        </button>
+                        <div class="notifications-panel" id="notificationsPanel">
+                            <div class="notif-header">
+                                <h4>Notifications & Alerts</h4>
+                                <span class="badge badge-renewal-due">3 Active</span>
+                            </div>
+                            <div class="notif-list" id="notifList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Role / User Profile Switcher -->
+                    <div class="user-profile-menu">
+                        <button class="user-profile-btn" id="userProfileBtn">
+                            <div class="user-avatar" id="topUserAvatar">RS</div>
+                            <div class="user-info">
+                                <span class="user-name" id="topUserName">Rajesh Sharma</span>
+                                <span class="user-role-badge" id="topUserRole">Admin (BR-04)</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-muted);"></i>
+                        </button>
+                        <div class="dropdown-panel" id="userDropdownPanel">
+                            <div class="dropdown-header">
+                                <span>Switch User Role</span>
+                            </div>
+                            <div class="dropdown-item active" data-user-id="USR-01">
+                                <i class="fa-solid fa-user-shield"></i>
+                                <div>
+                                    <strong>Rajesh Sharma</strong>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">Branch Admin</div>
+                                </div>
+                            </div>
+                            <div class="dropdown-item" data-user-id="USR-02">
+                                <i class="fa-solid fa-user-tie"></i>
+                                <div>
+                                    <strong>Kavitha Ramachandran</strong>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">Claims Manager</div>
+                                </div>
+                            </div>
+                            <div class="dropdown-item" data-user-id="USR-03">
+                                <i class="fa-solid fa-id-card-clip"></i>
+                                <div>
+                                    <strong>Suresh Kumar</strong>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">LIC Agent (04829)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Body -->
+            <main class="content-body">
+                <!-- ========================================================
+                     MODULE 1: DASHBOARD
+                     ======================================================== -->
+                <section class="content-section active" id="dashboard">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Policy Dashboard</h1>
+                            <p>Overview of insurance policy holders, premiums, renewals, and claims pipeline</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="App.navigateTo('register')">
+                                <i class="fa-solid fa-user-plus"></i> New Holder
+                            </button>
+                            <button class="btn btn-outline" onclick="App.navigateTo('issue-policy')">
+                                <i class="fa-solid fa-file-signature"></i> Issue Policy
+                            </button>
+                            <button class="btn btn-secondary" onclick="App.navigateTo('reports')">
+                                <i class="fa-solid fa-download"></i> Export Reports
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI Metric Cards Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <span>Total Policy Holders</span>
+                                <h3 id="statTotalHolders">6</h3>
+                                <div class="stat-badge positive"><i class="fa-solid fa-arrow-trend-up"></i> +12% this month</div>
+                            </div>
+                            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <span>Active Policies</span>
+                                <h3 id="statActivePolicies">8</h3>
+                                <div class="stat-badge neutral"><i class="fa-solid fa-shield-heart"></i> Across 6 Plans</div>
+                            </div>
+                            <div class="stat-icon emerald"><i class="fa-solid fa-file-contract"></i></div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <span>Total Premiums Collected</span>
+                                <h3 id="statTotalPremiums">₹3,18,500</h3>
+                                <div class="stat-badge positive"><i class="fa-solid fa-circle-check"></i> 100% Reconciled</div>
+                            </div>
+                            <div class="stat-icon amber"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <span>Renewals Due</span>
+                                <h3 id="statPendingRenewals">2</h3>
+                                <div class="stat-badge warning"><i class="fa-solid fa-clock"></i> Action Required</div>
+                            </div>
+                            <div class="stat-icon rose"><i class="fa-solid fa-arrows-rotate"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Action Banner -->
+                    <div class="action-banner">
+                        <div class="action-banner-text">
+                            <h3><i class="fa-solid fa-award"></i> PolicyPro Management Workspace</h3>
+                            <p>Fast-track LIC policy registration, calculate renewal terms, and track instant settlement receipts.</p>
+                        </div>
+                        <div class="action-banner-buttons">
+                            <button class="btn btn-white" onclick="App.navigateTo('premiums')">
+                                <i class="fa-solid fa-receipt"></i> Collect Premium
+                            </button>
+                            <button class="btn btn-white-outline" onclick="App.openNewClaimModal()">
+                                <i class="fa-solid fa-hand-holding-dollar"></i> File New Claim
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div class="charts-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Premium Inflow Trend</h3>
+                                    <p>Monthly premium collection volume in INR (₹)</p>
+                                </div>
+                                <span class="badge badge-active">FY 2026</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="premiumTrendChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Policy Type Distribution</h3>
+                                    <p>Portfolio mix by insurance category</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="policyTypeChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Policy Holders & Upcoming Renewals Tables Grid -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.25rem;">
+                        <!-- Recent Policy Holders -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Recent Policy Holders</h3>
+                                    <p>Latest registered clients & policy counts</p>
+                                </div>
+                                <a href="#holders" class="btn btn-outline btn-sm" onclick="App.navigateTo('holders')">View All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Holder</th>
+                                            <th>Contact</th>
+                                            <th>City</th>
+                                            <th>Policies</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashboardRecentHoldersTable">
+                                        <!-- Dynamically generated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Urgent Renewal Reminders -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Renewals Due & Overdue</h3>
+                                    <p>Policies requiring immediate premium deposit</p>
+                                </div>
+                                <a href="#renewals" class="btn btn-outline btn-sm" onclick="App.navigateTo('renewals')">Manage</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Policy / Holder</th>
+                                            <th>Due Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Remind</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashboardRenewalsTable">
+                                        <!-- Dynamically generated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 2: POLICY HOLDER REGISTRATION
+                     ======================================================== -->
+                <section class="content-section" id="register">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Policy Holder Registration</h1>
+                            <p>Enter client personal information, KYC particulars, and nominee details</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline" onclick="App.navigateTo('holders')">
+                                <i class="fa-solid fa-users"></i> View All Holders
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>New Policy Holder KYC & Enrolment Form</h3>
+                                <p>All fields marked with an asterisk (<span style="color:var(--danger)">*</span>) are mandatory under insurance guidelines.</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form id="holderRegistrationForm">
+                                <div class="form-grid">
+                                    <div class="form-section-title">
+                                        <i class="fa-solid fa-address-card"></i> 1. Personal & Contact Details
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regFullName">Full Name <span class="required">*</span></label>
+                                        <input type="text" id="regFullName" class="form-control" placeholder="e.g. Ramesh Chandra Verma" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regEmail">Email Address <span class="required">*</span></label>
+                                        <input type="email" id="regEmail" class="form-control" placeholder="ramesh.verma@example.com" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regPhone">Phone Number <span class="required">*</span></label>
+                                        <input type="tel" id="regPhone" class="form-control" placeholder="+91 98765 43210" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regDob">Date of Birth <span class="required">*</span></label>
+                                        <input type="date" id="regDob" class="form-control" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regGender">Gender <span class="required">*</span></label>
+                                        <select id="regGender" class="form-control" required>
+                                            <option value="">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regPan">PAN Number / Aadhaar Ref <span class="required">*</span></label>
+                                        <input type="text" id="regPan" class="form-control" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase;" required>
+                                    </div>
+
+                                    <div class="form-group form-grid-full">
+                                        <label for="regAddress">Residential Address <span class="required">*</span></label>
+                                        <input type="text" id="regAddress" class="form-control" placeholder="Door No, Street Name, Landmark" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regCity">City <span class="required">*</span></label>
+                                        <input type="text" id="regCity" class="form-control" placeholder="e.g. Chennai" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regState">State <span class="required">*</span></label>
+                                        <input type="text" id="regState" class="form-control" placeholder="e.g. Tamil Nadu" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regPincode">Pincode <span class="required">*</span></label>
+                                        <input type="text" id="regPincode" class="form-control" placeholder="600001" maxlength="6" required>
+                                    </div>
+
+                                    <div class="form-section-title">
+                                        <i class="fa-solid fa-briefcase"></i> 2. Occupation & Financial Profile
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regOccupation">Occupation / Profession <span class="required">*</span></label>
+                                        <input type="text" id="regOccupation" class="form-control" placeholder="e.g. Software Engineer / Businessman" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regIncome">Annual Income (₹ INR) <span class="required">*</span></label>
+                                        <input type="number" id="regIncome" class="form-control" placeholder="e.g. 1200000" min="100000" step="10000" required>
+                                    </div>
+
+                                    <div class="form-section-title">
+                                        <i class="fa-solid fa-heart"></i> 3. Nominee Particulars
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regNominee">Nominee Full Name <span class="required">*</span></label>
+                                        <input type="text" id="regNominee" class="form-control" placeholder="e.g. Sunita Verma" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regNomineeRelation">Relationship with Nominee <span class="required">*</span></label>
+                                        <select id="regNomineeRelation" class="form-control" required>
+                                            <option value="">Select Relation</option>
+                                            <option value="Spouse">Spouse</option>
+                                            <option value="Child">Child (Son/Daughter)</option>
+                                            <option value="Parent">Parent (Father/Mother)</option>
+                                            <option value="Sibling">Sibling (Brother/Sister)</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regNomineePhone">Nominee Contact Number</label>
+                                        <input type="tel" id="regNomineePhone" class="form-control" placeholder="+91 98765 43219">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                                    <button type="reset" class="btn btn-outline">
+                                        <i class="fa-solid fa-rotate-left"></i> Clear Form
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa-solid fa-floppy-disk"></i> Register Policy Holder
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 3: POLICY ISSUANCE
+                     ======================================================== -->
+                <section class="content-section" id="issue-policy">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Issue New Insurance Policy</h1>
+                            <p>Generate underwriting contracts, assign life cover, and schedule premium instalments</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline" onclick="App.navigateTo('holders')">
+                                <i class="fa-solid fa-users"></i> Policy Holders
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>Policy Underwriting & Issuance Desk</h3>
+                                <p>Select client, choose product plan, and finalize insurance terms</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form id="policyIssuanceForm">
+                                <div class="form-grid">
+                                    <div class="form-section-title">
+                                        <i class="fa-solid fa-user-check"></i> 1. Policy Holder Selection
+                                    </div>
+
+                                    <div class="form-group form-grid-full">
+                                        <label for="issueHolderSelect">Select Registered Holder <span class="required">*</span></label>
+                                        <select id="issueHolderSelect" class="form-control" required>
+                                            <!-- Dynamically populated -->
+                                        </select>
+                                    </div>
+
+                                    <div class="form-section-title">
+                                        <i class="fa-solid fa-file-invoice"></i> 2. Insurance Plan & Coverage
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="issuePolicyType">Plan Category <span class="required">*</span></label>
+                                        <select id="issuePolicyType" class="form-control" required>
+                                            <option value="Endowment Plan">💰 Endowment Plan</option>
+                                            <option value="Term Insurance">🛡️ Term Insurance</option>
+                                            <option value="Health Insurance">🏥 Health Insurance</option>
+                                            <option value="Money Back Plan">📈 Money Back Plan</option>
+                                            <option value="Child Plan">👨‍👩‍👧‍👦 Child Plan</option>
+                                            <option value="Pension Plan">🏦 Pension Plan</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="issuePlanName">Specific Insurance Product <span class="required">*</span></label>
+                                        <input type="text" id="issuePlanName" class="form-control" value="LIC Jeevan Labh (Plan 936)" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="issueSumAssured">Sum Assured (₹ INR Cover) <span class="required">*</span></label>
+                                        <input type="number" id="issueSumAssured" class="form-control" value="1000000" min="100000" step="50000" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="issuePaymentFreq">Payment Frequency <span class="required">*</span></label>
+                                        <select id="issuePaymentFreq" class="form-control" required>
+                                            <option value="Yearly">Yearly (Annual)</option>
+                                            <option value="Half-Yearly">Half-Yearly</option>
+                                            <option value="Quarterly">Quarterly</option>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="Single Premium">Single Premium (One-time)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="issueTerm">Policy Term (Years) <span class="required">*</span></label>
+                                        <input type="number" id="issueTerm" class="form-control" value="20" min="5" max="40" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="issuePremiumTerm">Premium Paying Term (Years) <span class="required">*</span></label>
+                                        <input type="number" id="issuePremiumTerm" class="form-control" value="15" min="1" max="40" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="issuePremiumAmount">Calculated Premium Amount (₹ INR) <span class="required">*</span></label>
+                                        <input type="number" id="issuePremiumAmount" class="form-control" value="38500" required>
+                                        <small style="color:var(--text-muted); font-size:0.75rem;">Auto-estimated based on sum assured & plan frequency.</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="issueStartDate">Policy Commencement Date <span class="required">*</span></label>
+                                        <input type="date" id="issueStartDate" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                                    <button type="button" class="btn btn-secondary" id="autoCalcPremiumBtn">
+                                        <i class="fa-solid fa-calculator"></i> Re-Calculate Premium
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa-solid fa-certificate"></i> Issue & Generate Policy Bond
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 4: POLICY HOLDER LISTING
+                     ======================================================== -->
+                <section class="content-section" id="holders">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Policy Holders Directory</h1>
+                            <p>Search, filter, inspect full profiles, and manage active life insurance portfolios</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="App.navigateTo('register')">
+                                <i class="fa-solid fa-user-plus"></i> Add New Holder
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search & Filter Controls -->
+                    <div class="filters-bar">
+                        <div class="filters-left">
+                            <input type="text" id="holderSearchInput" class="filter-input" placeholder="Search by name, email, phone or PAN..." style="min-width: 250px;">
+                            <select id="holderPlanFilter" class="filter-input">
+                                <option value="ALL">All Policy Plans</option>
+                                <option value="Endowment Plan">Endowment Plan</option>
+                                <option value="Term Insurance">Term Insurance</option>
+                                <option value="Health Insurance">Health Insurance</option>
+                                <option value="Money Back Plan">Money Back Plan</option>
+                                <option value="Child Plan">Child Plan</option>
+                                <option value="Pension Plan">Pension Plan</option>
+                            </select>
+                            <select id="holderStatusFilter" class="filter-input">
+                                <option value="ALL">All Statuses</option>
+                                <option value="Active">Active</option>
+                                <option value="Renewal Due">Renewal Due</option>
+                                <option value="Lapsed">Lapsed</option>
+                            </select>
+                        </div>
+                        <div class="filters-right">
+                            <button class="btn btn-outline btn-sm" id="viewModeGridBtn" title="Grid Card View">
+                                <i class="fa-solid fa-table-cells"></i>
+                            </button>
+                            <button class="btn btn-outline btn-sm active" id="viewModeTableBtn" title="List Table View">
+                                <i class="fa-solid fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Table View -->
+                    <div class="card" id="holdersTableView">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Holder ID</th>
+                                        <th>Client Profile</th>
+                                        <th>Contact & City</th>
+                                        <th>Occupation / Income</th>
+                                        <th>Nominee</th>
+                                        <th>Policies</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="holdersTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Grid Cards View -->
+                    <div class="cards-grid" id="holdersGridView" style="display: none;">
+                        <!-- Populated dynamically -->
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 5: POLICY HOLDER DETAIL VIEW
+                     ======================================================== -->
+                <section class="content-section" id="holder-detail">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Policy Holder Comprehensive Dossier</h1>
+                            <p>360-degree view of client profile, policy contracts, payment ledger, and claims</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline" onclick="App.navigateTo('holders')">
+                                <i class="fa-solid fa-arrow-left"></i> Back to Directory
+                            </button>
+                            <button class="btn btn-primary" id="detailIssuePolicyBtn">
+                                <i class="fa-solid fa-file-circle-plus"></i> Issue New Policy
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="holderDetailContainer">
+                        <!-- Populated dynamically by App.renderHolderDetail() -->
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 6: PREMIUM COLLECTION
+                     ======================================================== -->
+                <section class="content-section" id="premiums">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Premium Collection & Receipts</h1>
+                            <p>Collect renewal instalments, reconcile payments, and generate digitally verified receipts</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline" onclick="App.exportPremiumsCSV()">
+                                <i class="fa-solid fa-file-csv"></i> Export Collection CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.75rem;">
+                        <!-- Payment Collection Form -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Receive Premium Payment</h3>
+                                    <p>Select policy and capture settlement details</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form id="premiumCollectionForm">
+                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                        <label for="premPolicySelect">Select Active / Due Policy <span class="required">*</span></label>
+                                        <select id="premPolicySelect" class="form-control" required>
+                                            <!-- Dynamically populated -->
+                                        </select>
+                                    </div>
+
+                                    <!-- Policy Preview Banner -->
+                                    <div id="premPolicyInfoBox" style="background: var(--bg-alt); padding: 1rem; border-radius: var(--radius-md); border: 1px dashed var(--border-color); margin-bottom: 1rem; display: none;">
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                                            <span>Policy Holder:</span> <strong id="premHolderNameText">-</strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                                            <span>Plan Name:</span> <strong id="premPlanNameText">-</strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                                            <span>Next Due Date:</span> <strong id="premDueDateText" style="color:var(--danger);">-</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="premAmount">Premium Amount (₹ INR) <span class="required">*</span></label>
+                                            <input type="number" id="premAmount" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="premMethod">Payment Method <span class="required">*</span></label>
+                                            <select id="premMethod" class="form-control" required>
+                                                <option value="UPI">BHIM UPI / QR Code</option>
+                                                <option value="Net Banking">Net Banking (IMPS/NEFT)</option>
+                                                <option value="Debit Card">Debit Card</option>
+                                                <option value="Credit Card">Credit Card</option>
+                                                <option value="Cash">Cash (Branch Counter)</option>
+                                                <option value="Cheque">Cheque / Demand Draft</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="premDate">Payment Date <span class="required">*</span></label>
+                                            <input type="date" id="premDate" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="premTxnId">Transaction / Cheque Ref ID</label>
+                                            <input type="text" id="premTxnId" class="form-control" placeholder="e.g. UPI-998822104">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="margin-top: 1rem;">
+                                        <label for="premNotes">Collector Notes / Remarks</label>
+                                        <input type="text" id="premNotes" class="form-control" placeholder="Instalment cleared successfully.">
+                                    </div>
+
+                                    <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa-solid fa-receipt"></i> Process Payment & Print Receipt
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Collection Statistics Summary -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Collection Ledger Insights</h3>
+                                    <p>Live accounting summary & modes distribution</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                    <div style="background: var(--primary-light); padding: 1.25rem; border-radius: var(--radius-md); text-align: center;">
+                                        <span style="font-size: 0.75rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Total Reconciled</span>
+                                        <h3 style="font-size: 1.5rem; color: var(--primary); font-weight: 800;" id="collectionTotalLedger">₹3,18,500</h3>
+                                    </div>
+                                    <div style="background: var(--success-light); padding: 1.25rem; border-radius: var(--radius-md); text-align: center;">
+                                        <span style="font-size: 0.75rem; color: var(--success); font-weight: 700; text-transform: uppercase;">Receipts Issued</span>
+                                        <h3 style="font-size: 1.5rem; color: var(--success); font-weight: 800;" id="collectionReceiptsCount">6</h3>
+                                    </div>
+                                </div>
+                                <div class="chart-container" style="height: 180px;">
+                                    <canvas id="paymentMethodsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Transaction History Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>Official Payment Receipts Log</h3>
+                                <p>Historical audit trail of all verified premium collections</p>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Receipt #</th>
+                                        <th>Policy Number</th>
+                                        <th>Policy Holder</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Method</th>
+                                        <th>Txn Ref</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="premiumsHistoryTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 7: RENEWAL MANAGEMENT
+                     ======================================================== -->
+                <section class="content-section" id="renewals">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Policy Renewal Management</h1>
+                            <p>Monitor renewal dates, manage grace periods, and dispatch automated reminder alerts</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" id="broadcastRemindersBtn">
+                                <i class="fa-solid fa-paper-plane"></i> Send Reminders to All Due
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Renewal Filters & Metrics -->
+                    <div class="stats-grid" style="margin-bottom: 1.25rem;">
+                        <div class="stat-card" style="cursor: pointer;" onclick="App.filterRenewals('ALL')">
+                            <div class="stat-info">
+                                <span>Total Tracked</span>
+                                <h3 id="renewalStatAll">5</h3>
+                                <div class="stat-badge neutral">All Scheduled</div>
+                            </div>
+                            <div class="stat-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                        </div>
+                        <div class="stat-card" style="cursor: pointer;" onclick="App.filterRenewals('Due')">
+                            <div class="stat-info">
+                                <span>Due Now / 7 Days</span>
+                                <h3 id="renewalStatDue" style="color:var(--warning)">1</h3>
+                                <div class="stat-badge warning">Urgent Attention</div>
+                            </div>
+                            <div class="stat-icon amber"><i class="fa-solid fa-bell"></i></div>
+                        </div>
+                        <div class="stat-card" style="cursor: pointer;" onclick="App.filterRenewals('Overdue')">
+                            <div class="stat-info">
+                                <span>Overdue (Grace Period)</span>
+                                <h3 id="renewalStatOverdue" style="color:var(--danger)">1</h3>
+                                <div class="stat-badge warning">Lapse Risk</div>
+                            </div>
+                            <div class="stat-icon rose"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        </div>
+                        <div class="stat-card" style="cursor: pointer;" onclick="App.filterRenewals('Upcoming')">
+                            <div class="stat-info">
+                                <span>Upcoming (30+ Days)</span>
+                                <h3 id="renewalStatUpcoming" style="color:var(--success)">3</h3>
+                                <div class="stat-badge positive">In Good Standing</div>
+                            </div>
+                            <div class="stat-icon emerald"><i class="fa-solid fa-circle-check"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Renewal Tracking Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>Renewal Schedule & Reminder Pipeline</h3>
+                                <p>Automated reminders will dispatch through SMS, WhatsApp, and registered email.</p>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Policy Number</th>
+                                        <th>Policy Holder</th>
+                                        <th>Contact</th>
+                                        <th>Renewal Due Date</th>
+                                        <th>Grace End Date</th>
+                                        <th>Premium Due</th>
+                                        <th>Status</th>
+                                        <th>Reminders</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="renewalsTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 8: CLAIM PROCESSING
+                     ======================================================== -->
+                <section class="content-section" id="claims">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Insurance Claims Processing</h1>
+                            <p>Register, investigate, verify documents, and disburse life and health insurance claims</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="App.openNewClaimModal()">
+                                <i class="fa-solid fa-plus-circle"></i> Register New Claim
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>Claims Assessment & Settlement Register</h3>
+                                <p>Review claim status, examine uploaded medical/death proofs, and record decisions</p>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Claim ID</th>
+                                        <th>Policy Number</th>
+                                        <th>Policy Holder</th>
+                                        <th>Claim Category</th>
+                                        <th>Claim Amount</th>
+                                        <th>Intimation Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="claimsTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 9: COMMUNICATION (SIMULATED)
+                     ======================================================== -->
+                <section class="content-section" id="communications">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Client Communications & Notifications</h1>
+                            <p>Send personalized notifications, reminder broadcasts, and view dispatch history</p>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid" style="grid-template-columns: 1fr 1fr;">
+                        <!-- Message Composer -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Send Notification Dispatch</h3>
+                                    <p>Select policy holder and choose communication template</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form id="commComposerForm">
+                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                        <label for="commHolderSelect">Recipient Policy Holder <span class="required">*</span></label>
+                                        <select id="commHolderSelect" class="form-control" required>
+                                            <!-- Dynamically populated -->
+                                        </select>
+                                    </div>
+
+                                    <div class="form-grid" style="margin-bottom: 1rem;">
+                                        <div class="form-group">
+                                            <label for="commChannel">Delivery Channel <span class="required">*</span></label>
+                                            <select id="commChannel" class="form-control" required>
+                                                <option value="SMS">📱 SMS Message</option>
+                                                <option value="WhatsApp">💬 WhatsApp Alert</option>
+                                                <option value="Email">✉️ Official Email</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="commTemplate">Message Template</label>
+                                            <select id="commTemplate" class="form-control">
+                                                <option value="custom">-- Custom Message --</option>
+                                                <option value="welcome">Welcome & Policy Bond Notice</option>
+                                                <option value="renewal">Upcoming Renewal Premium Due</option>
+                                                <option value="overdue">Urgent Overdue & Grace Period Warning</option>
+                                                <option value="claim">Claim Intimation Acknowledgement</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                        <label for="commSubject">Subject Line <span class="required">*</span></label>
+                                        <input type="text" id="commSubject" class="form-control" placeholder="e.g. Important: Policy Renewal Reminder" required>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                                        <label for="commMessage">Message Body <span class="required">*</span></label>
+                                        <textarea id="commMessage" class="form-control" rows="5" placeholder="Compose message here..." required></textarea>
+                                    </div>
+
+                                    <div style="display: flex; justify-content: flex-end;">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa-solid fa-paper-plane"></i> Send Notification
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Communications Log -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Sent Messages & Alerts History</h3>
+                                    <p>Audit trail of all simulated customer correspondence</p>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="max-height: 440px; overflow-y: auto;">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Recipient</th>
+                                            <th>Channel</th>
+                                            <th>Subject & Summary</th>
+                                            <th>Dispatched</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="commsLogTableBody">
+                                        <!-- Dynamically populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================
+                     MODULE 10: REPORTS & ANALYTICS
+                     ======================================================== -->
+                <section class="content-section" id="reports">
+                    <div class="page-header">
+                        <div class="page-title-group">
+                            <h1>Reports & Executive Analytics</h1>
+                            <p>Consolidated business metrics, CSV data downloads, and printable compliance audits</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline" onclick="App.exportHoldersCSV()">
+                                <i class="fa-solid fa-file-csv"></i> Holders CSV
+                            </button>
+                            <button class="btn btn-outline" onclick="App.exportPoliciesCSV()">
+                                <i class="fa-solid fa-file-csv"></i> Policies CSV
+                            </button>
+                            <button class="btn btn-primary" onclick="window.print()">
+                                <i class="fa-solid fa-print"></i> Print Official Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Financial Summary -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <span>Total Sum Assured In Force</span>
+                                <h3 id="reportTotalSumAssured">₹2.88 Cr</h3>
+                                <div class="stat-badge positive">Underwritten Portfolio</div>
+                            </div>
+                            <div class="stat-icon"><i class="fa-solid fa-vault"></i></div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <span>Annual Premium Volume</span>
+                                <h3 id="reportAnnualPremiums">₹4,77,500</h3>
+                                <div class="stat-badge neutral">Recurring Annuity</div>
+                            </div>
+                            <div class="stat-icon emerald"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <span>Claim Settlement Ratio</span>
+                                <h3 id="reportSettlementRatio">98.4%</h3>
+                                <div class="stat-badge positive"><i class="fa-solid fa-shield-check"></i> Industry Leading</div>
+                            </div>
+                            <div class="stat-icon blue"><i class="fa-solid fa-award"></i></div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <span>Policy Persistency Rate</span>
+                                <h3 id="reportPersistency">87.5%</h3>
+                                <div class="stat-badge positive">Active Coverage</div>
+                            </div>
+                            <div class="stat-icon amber"><i class="fa-solid fa-heart-pulse"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Charts -->
+                    <div class="charts-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Claims Assessment Breakdown</h3>
+                                    <p>Claim status distribution (Approved vs Investigation vs Submitted)</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="claimsAnalyticsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Premium Payment Frequency</h3>
+                                    <p>Instalment cycle breakdown across active policies</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="frequencyChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Complete Master Policies Summary Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>Master Policy Register (Audited)</h3>
+                                <p>Comprehensive table of all live insurance contracts</p>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Policy Number</th>
+                                        <th>Holder Name</th>
+                                        <th>Plan Name</th>
+                                        <th>Category</th>
+                                        <th>Sum Assured</th>
+                                        <th>Premium</th>
+                                        <th>Frequency</th>
+                                        <th>Maturity</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportsMasterTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         MODALS CONTAINER
+         ======================================================== -->
+
+    <!-- 1. Policy Bond Certificate Modal -->
+    <div class="modal-overlay" id="policyBondModal">
+        <div class="modal-dialog lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-certificate" style="color:var(--primary);"></i> Insurance Policy Bond Document</h3>
+                <button class="modal-close-btn" onclick="App.closeModal('policyBondModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="policyBondModalBody">
+                <!-- Dynamically generated certificate -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="App.closeModal('policyBondModal')">Close</button>
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="fa-solid fa-print"></i> Print Policy Bond
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Premium Payment Receipt Modal -->
+    <div class="modal-overlay" id="receiptModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-receipt" style="color:var(--primary);"></i> Official Premium Receipt</h3>
+                <button class="modal-close-btn" onclick="App.closeModal('receiptModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="receiptModalBody">
+                <!-- Dynamically generated receipt -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="App.closeModal('receiptModal')">Close</button>
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="fa-solid fa-print"></i> Print Official Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Register New Claim Modal -->
+    <div class="modal-overlay" id="newClaimModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-hand-holding-medical" style="color:var(--primary);"></i> Register Insurance Claim</h3>
+                <button class="modal-close-btn" onclick="App.closeModal('newClaimModal')">&times;</button>
+            </div>
+            <form id="newClaimForm">
+                <div class="modal-body">
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="claimPolicySelect">Select Covered Policy <span class="required">*</span></label>
+                        <select id="claimPolicySelect" class="form-control" required>
+                            <!-- Dynamically populated -->
+                        </select>
+                    </div>
+
+                    <div class="form-grid" style="margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label for="claimType">Claim Category <span class="required">*</span></label>
+                            <select id="claimType" class="form-control" required>
+                                <option value="Hospitalization Reimbursement">Hospitalization Reimbursement</option>
+                                <option value="Critical Illness">Critical Illness Benefit</option>
+                                <option value="Survival Benefit">Survival Benefit (Money Back)</option>
+                                <option value="Maturity Claim">Maturity Settlement</option>
+                                <option value="Death Claim">Death Benefit</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="claimAmount">Claim Amount (₹ INR) <span class="required">*</span></label>
+                            <input type="number" id="claimAmount" class="form-control" placeholder="e.g. 50000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="claimIncidentDate">Date of Incident / Loss <span class="required">*</span></label>
+                            <input type="date" id="claimIncidentDate" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="claimDocs">Simulated Document Proofs</label>
+                            <input type="text" id="claimDocs" class="form-control" placeholder="e.g. Discharge_Summary.pdf, Bills.pdf">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="claimDescription">Incident Description / Medical Summary <span class="required">*</span></label>
+                        <textarea id="claimDescription" class="form-control" rows="3" placeholder="Provide event summary, hospital name, or claim rationale..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="App.closeModal('newClaimModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> Submit Claim
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. Review Claim Status Modal (Manager/Admin action) -->
+    <div class="modal-overlay" id="reviewClaimModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-stamp" style="color:var(--primary);"></i> Underwriting & Claim Review</h3>
+                <button class="modal-close-btn" onclick="App.closeModal('reviewClaimModal')">&times;</button>
+            </div>
+            <form id="reviewClaimForm">
+                <input type="hidden" id="reviewClaimId">
+                <div class="modal-body" id="reviewClaimModalBody">
+                    <!-- Populated dynamically -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="App.closeModal('reviewClaimModal')">Close</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-check"></i> Update Claim Decision
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Application Scripts -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
