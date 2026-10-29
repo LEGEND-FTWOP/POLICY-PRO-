@@ -1,10 +1,4 @@
-/**
- * PolicyPro - Complete Insurance Policy Holder Management Platform
- * Task ID: WD-LIC-002 | Student Code: DAS-LIC-002
- * Data Alcott Systems - Free Web Development Internship
- * 
- * Core Application Logic & Interactivity
- */
+
 
 const App = {
     currentHolderDetailId: null,
